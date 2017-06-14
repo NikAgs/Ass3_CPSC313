@@ -13,8 +13,8 @@
  */
 static void cache_line_init(cache_line_t *cache_line, size_t block_size)
 {
-  cache_line->is_valid = 0;
-  cache_line->data = (unsigned char *) malloc(block_size * sizeof(unsigned char));
+    cache_line->is_valid = 0;
+    cache_line->data = (unsigned char *) malloc(block_size * sizeof(unsigned char));
 }
 
 /*
@@ -23,13 +23,13 @@ static void cache_line_init(cache_line_t *cache_line, size_t block_size)
  */
 static void cache_set_init(cache_set_t *cache_set, unsigned int associativity, size_t block_size)
 {
-  int i;
-  cache_set->cache_lines = (cache_line_t **) malloc(associativity * sizeof (cache_line_t *));
-  
-  for (i = 0; i < associativity; i++) {
-    cache_set->cache_lines[i] = (cache_line_t *) malloc(sizeof(cache_line_t));
-    cache_line_init(cache_set->cache_lines[i], block_size);
-  }
+    int i;
+    cache_set->cache_lines = (cache_line_t **) malloc(associativity * sizeof (cache_line_t *));
+
+    for (i = 0; i < associativity; i++) {
+        cache_set->cache_lines[i] = (cache_line_t *) malloc(sizeof(cache_line_t));
+        cache_line_init(cache_set->cache_lines[i], block_size);
+    }
 }
 
 /*
@@ -39,14 +39,14 @@ static void cache_set_init(cache_set_t *cache_set, unsigned int associativity, s
  */
 static void compute_shift_and_mask(unsigned int value, intptr_t *shift, intptr_t *mask, intptr_t init_shift)
 {
-  *mask = 0;
-  *shift = init_shift;
-  
-  while (value > 1) {
-    (*shift)++;
-    value >>= 1;
-    *mask = (*mask << 1) | 1;
-  }
+    *mask = 0;
+    *shift = init_shift;
+
+    while (value > 1) {
+        (*shift)++;
+        value >>= 1;
+        *mask = (*mask << 1) | 1;
+    }
 }
 
 /*
@@ -57,47 +57,47 @@ static void compute_shift_and_mask(unsigned int value, intptr_t *shift, intptr_t
  */
 cache_t *cache_new(size_t num_blocks, size_t block_size, unsigned int associativity, int policies)
 {
-  int i;
-  
-  /*
+    int i;
+
+    /*
    * Error checking.
    */
-  assert(block_size % sizeof(int64_t) == 0);
-  assert(num_blocks % associativity == 0);
-  
-  /*
+    assert(block_size % sizeof(int64_t) == 0);
+    assert(num_blocks % associativity == 0);
+
+    /*
    * Create the cache and initialize constant fields.
    */
-  cache_t *cache = (cache_t *) malloc(sizeof(cache_t));
-  cache->access_count = 0;
-  cache->miss_count = 0;
-  
-  /*
+    cache_t *cache = (cache_t *) malloc(sizeof(cache_t));
+    cache->access_count = 0;
+    cache->miss_count = 0;
+
+    /*
    * Initialize size fields.
    */
-  cache->policies = policies;
-  cache->block_size = block_size;
-  cache->associativity = associativity;
-  cache->num_sets = num_blocks / associativity;
-  
-  /*
+    cache->policies = policies;
+    cache->block_size = block_size;
+    cache->associativity = associativity;
+    cache->num_sets = num_blocks / associativity;
+
+    /*
    * Initialize shifts and masks.
    */
-  compute_shift_and_mask(block_size, &cache->set_index_shift, &cache->block_offset_mask, 0);
-  compute_shift_and_mask(cache->num_sets, &cache->tag_shift, &cache->set_index_mask, cache->set_index_shift);
-  
-  /*
+    compute_shift_and_mask(block_size, &cache->set_index_shift, &cache->block_offset_mask, 0);
+    compute_shift_and_mask(cache->num_sets, &cache->tag_shift, &cache->set_index_mask, cache->set_index_shift);
+
+    /*
    * Initialize cache sets.
    */
-  cache->sets = (cache_set_t *) malloc(cache->num_sets * sizeof (cache_set_t));
-  for (i = 0; i < cache->num_sets; i++) {
-    cache_set_init(&cache->sets[i], cache->associativity, cache->block_size);
-  }
-  
-  /*
+    cache->sets = (cache_set_t *) malloc(cache->num_sets * sizeof (cache_set_t));
+    for (i = 0; i < cache->num_sets; i++) {
+        cache_set_init(&cache->sets[i], cache->associativity, cache->block_size);
+    }
+
+    /*
    * Done.
    */
-  return cache;
+    return cache;
 }
 
 /*
@@ -107,7 +107,13 @@ cache_t *cache_new(size_t num_blocks, size_t block_size, unsigned int associativ
  */
 static int cache_line_is_valid_and_both_tags_match(cache_line_t *cache_line, intptr_t tag)
 {
-  /* TO BE COMPLETED BY THE STUDENT */
+    /* TO BE COMPLETED BY THE STUDENT */
+    if (cache_line->is_valid == 1) {
+        if (cache_line->tag == tag) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /*
@@ -117,7 +123,7 @@ static int cache_line_is_valid_and_both_tags_match(cache_line_t *cache_line, int
  */
 static int64_t cache_line_retrieve_data(cache_line_t *cache_line, size_t offset)
 {
-  /* TO BE COMPLETED BY THE STUDENT */
+    /* TO BE COMPLETED BY THE STUDENT */
 }
 
 /*
@@ -131,15 +137,15 @@ static int64_t cache_line_retrieve_data(cache_line_t *cache_line, size_t offset)
  */
 static cache_line_t *cache_line_make_mru(cache_set_t *cache_set, size_t line_index)
 {
-  int i;
-  cache_line_t *line = cache_set->cache_lines[line_index];
-  
-  for (i = line_index - 1; i >= 0; i--) {
-    cache_set->cache_lines[i + 1] = cache_set->cache_lines[i];
-  }
-  
-  cache_set->cache_lines[0] = line;
-  return line;
+    int i;
+    cache_line_t *line = cache_set->cache_lines[line_index];
+
+    for (i = line_index - 1; i >= 0; i--) {
+        cache_set->cache_lines[i + 1] = cache_set->cache_lines[i];
+    }
+
+    cache_set->cache_lines[0] = line;
+    return line;
 }
 
 /*
@@ -150,9 +156,9 @@ static cache_line_t *cache_line_make_mru(cache_set_t *cache_set, size_t line_ind
  */
 static cache_line_t *cache_set_find_matching_line(cache_t *cache, cache_set_t *cache_set, intptr_t tag)
 {
-  /* TO BE COMPLETED BY THE STUDENT */
-  
-  /*
+    /* TO BE COMPLETED BY THE STUDENT */
+
+    /*
    * Don't forget to call cache_line_make_mru(cache_set, i) if you
    * find a that cache line i is a match.
    */
@@ -165,9 +171,9 @@ static cache_line_t *cache_set_find_matching_line(cache_t *cache, cache_set_t *c
  */
 static cache_line_t *find_available_cache_line(cache_t *cache, cache_set_t *cache_set)
 {
-  /* TO BE COMPLETED BY THE STUDENT */
-  
-  /*
+    /* TO BE COMPLETED BY THE STUDENT */
+
+    /*
    * Don't forget to call cache_line_make_mru(cache_set, i) once you
    * have decided to use cache line i.
    */
@@ -178,22 +184,22 @@ static cache_line_t *find_available_cache_line(cache_t *cache, cache_set_t *cach
  */
 static cache_line_t *cache_set_add(cache_t *cache, cache_set_t *cache_set, intptr_t address, intptr_t tag)
 {
-  /*
+    /*
    * First locate the cache line to use.
    */
-  cache_line_t *line = find_available_cache_line(cache, cache_set);
-  
-  /*
+    cache_line_t *line = find_available_cache_line(cache, cache_set);
+
+    /*
    * Now set it up.
    */
-  line->tag = tag;
-  line->is_valid = 1;
-  memcpy(line->data, (void *) (address & ~cache->block_offset_mask), cache->block_size);
-  
-  /*
+    line->tag = tag;
+    line->is_valid = 1;
+    memcpy(line->data, (void *) (address & ~cache->block_offset_mask), cache->block_size);
+
+    /*
    * And return it.
    */
-  return line;
+    return line;
 }
 
 /*
@@ -202,7 +208,7 @@ static cache_line_t *cache_set_add(cache_t *cache, cache_set_t *cache_set, intpt
  */
 int64_t cache_read(cache_t *cache, void *address)
 {
-  /* TO BE COMPLETED BY THE STUDENT */
+    /* TO BE COMPLETED BY THE STUDENT */
 }
 
 /*
@@ -210,7 +216,7 @@ int64_t cache_read(cache_t *cache, void *address)
  */
 int cache_miss_count(cache_t *cache)
 {
-  return cache->miss_count;
+    return cache->miss_count;
 }
 
 /*
@@ -218,5 +224,5 @@ int cache_miss_count(cache_t *cache)
  */
 int cache_access_count(cache_t *cache)
 {
-  return cache->access_count;
+    return cache->access_count;
 }
