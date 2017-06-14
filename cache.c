@@ -164,11 +164,9 @@ static cache_line_t *cache_set_find_matching_line(cache_t *cache, cache_set_t *c
     /* TO BE COMPLETED BY THE STUDENT */
     for (int i=0; i < cache->associativity; i++ ) {
         if (cache_line_is_valid_and_both_tags_match(cache_set->cache_lines[i], tag) == 1) {
-			cache->access_count++;
             return cache_line_make_mru(cache_set, i);
         }
     }
-	cache->miss_count++;
     return NULL;
 
     /*
@@ -233,9 +231,11 @@ int64_t cache_read(cache_t *cache, void *address)
 	cache_line_t *line = cache_set_find_matching_line(cache, set, tag);
 
 	if(line == NULL) {
+		cache->miss_count++;
 		line = cache_set_add(cache, set, addr, tag);
 	}
 	
+	cache->access_count++;
 	return cache_line_retrieve_data(line, offset);
 }
 
