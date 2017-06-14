@@ -124,7 +124,7 @@ static int cache_line_is_valid_and_both_tags_match(cache_line_t *cache_line, int
 static int64_t cache_line_retrieve_data(cache_line_t *cache_line, size_t offset)
 {
     /* TO BE COMPLETED BY THE STUDENT */
-    int i;
+    int i = 0;
     for (int j=0; j<8; j++) {
         i += cache_line->data[offset + j] << 8*j;
     }
