@@ -125,7 +125,7 @@ static int64_t cache_line_retrieve_data(cache_line_t *cache_line, size_t offset)
 {
     /* TO BE COMPLETED BY THE STUDENT */
     int i;
-    for (int j=0; j<7; j++) {
+    for (int j=0; j<8; j++) {
         i += cache_line->data[offset + j] << 8*j;
     }
     return i;
@@ -162,6 +162,12 @@ static cache_line_t *cache_line_make_mru(cache_set_t *cache_set, size_t line_ind
 static cache_line_t *cache_set_find_matching_line(cache_t *cache, cache_set_t *cache_set, intptr_t tag)
 {
     /* TO BE COMPLETED BY THE STUDENT */
+    for (int i=0; i < cache->associativity; i++ ) {
+        if (cache_line_is_valid_and_both_tags_match(cache_set->cache_lines[i], tag) == 1) {
+            return cache_line_make_mru(cache_set, i);
+        }
+    }
+    return NULL:
 
     /*
    * Don't forget to call cache_line_make_mru(cache_set, i) if you
