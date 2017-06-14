@@ -169,7 +169,7 @@ static cache_line_t *cache_set_find_matching_line(cache_t *cache, cache_set_t *c
         }
     }
 	cache->miss_count++;
-    return NULL:
+    return NULL;
 
     /*
    * Don't forget to call cache_line_make_mru(cache_set, i) if you
@@ -228,11 +228,12 @@ int64_t cache_read(cache_t *cache, void *address)
 	size_t offset = addr & cache->block_offset_mask;
 	size_t set_index = addr & cache->set_index_mask;
 	intptr_t tag = addr >> cache->tag_shift;
-	
-	cache_line_t *line = cache_set_find_matching_line(cache, cache->sets[set_index], tag);
+
+	cache_set_t *set = cache->sets[set_index];
+	cache_line_t *line = cache_set_find_matching_line(cache, set, tag);
 
 	if(line == NULL) {
-		line = cache_set_add(cache, cache->sets[set_index], addr, tag);
+		line = cache_set_add(cache, set, addr, tag);
 	}
 	
 	return cache_line_retrieve_data(line, offset);
