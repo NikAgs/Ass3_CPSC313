@@ -126,7 +126,11 @@ static int64_t cache_line_retrieve_data(cache_line_t *cache_line, size_t offset)
     /* TO BE COMPLETED BY THE STUDENT */
     int i = 0;
     for (int j = 0; j < 8; j++) {
-        i += (cache_line->data[offset + j]) << (8 * j);
+		if((j % 2) == 0) {
+        	i += (cache_line->data[offset + j]) << (8 * (j + 1));
+		} else {
+			i += (cache_line->data[offset + j]) << (8 * (j - 1));
+		}
     }
     return i;
 }
