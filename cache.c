@@ -228,7 +228,7 @@ int64_t cache_read(cache_t *cache, void *address)
     /* TO BE COMPLETED BY THE STUDENT */
 	intptr_t addr = address;
 	size_t offset = addr & cache->block_offset_mask;
-	size_t set_index = addr >> cache->set_index_shift;
+	size_t set_index = ((addr >> cache->set_index_shift) & cache->set_index_mask);
 	intptr_t tag = addr >> cache->tag_shift;
 
 	cache_set_t *set = cache->sets+set_index;
