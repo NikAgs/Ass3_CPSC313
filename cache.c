@@ -168,7 +168,7 @@ static cache_line_t *cache_set_find_matching_line(cache_t *cache, cache_set_t *c
             return cache_line_make_mru(cache_set, i);
         }
     }
-	cache miss_count++;
+	cache->miss_count++;
     return NULL:
 
     /*
