@@ -220,6 +220,13 @@ static cache_line_t *cache_set_add(cache_t *cache, cache_set_t *cache_set, intpt
 int64_t cache_read(cache_t *cache, void *address)
 {
     /* TO BE COMPLETED BY THE STUDENT */
+	intptr_t addr = address;
+	size_t offset = addr & cache->block_offset_mask;
+	size_t set_index = addr & cache->set_index_mask;
+	intptr_t tag = addr >> cache->tag_shift;
+	
+	return cache_line_retrieve_data(cache_set_find_matching_line(cache,cache->sets[set_index],
+				tag), offset);
 }
 
 /*
