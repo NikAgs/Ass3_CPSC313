@@ -229,7 +229,7 @@ int64_t cache_read(cache_t *cache, void *address)
 	size_t set_index = addr & cache->set_index_mask;
 	intptr_t tag = addr >> cache->tag_shift;
 
-	cache_set_t *set = cache->sets[set_index];
+	cache_set_t *set = cache->sets+set_index;
 	cache_line_t *line = cache_set_find_matching_line(cache, set, tag);
 
 	if(line == NULL) {
