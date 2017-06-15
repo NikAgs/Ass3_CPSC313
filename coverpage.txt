@@ -23,17 +23,17 @@ file.
 
 
 STUDENT  1
-Name :
-St. No:
-Unix Id :
-Email:
+Name : Nikhil Agarwal
+St. No: 53835138
+Unix Id : 501(TheNik) 
+Email: nikhil.agarwal@alumni.ubc.ca
 
 
 STUDENT  2
-Name :
-St. No:
-Unix Id :
-Email:
+Name : Victor Li
+St. No: 40394141
+Unix Id : 502(victor)
+Email: kingv30@gmail.com
 
 
 ACKNOWLEDGMENTS :
