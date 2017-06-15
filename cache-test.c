@@ -97,4 +97,13 @@ int main()
   
   cache = cache_new(CACHE_SIZE_IN_BLOCKS, block_size, 1, CACHE_REPLACEMENTPOLICY_LRU);
   print_stats(sumC(a, 4, 128));
+    
+  cache = cache_new(CACHE_SIZE_IN_BLOCKS, block_size, 2, CACHE_REPLACEMENTPOLICY_LRU);
+  print_stats(sumB(a, 4, 128));
+
+  cache = cache_new(CACHE_SIZE_IN_BLOCKS, block_size, 4, CACHE_REPLACEMENTPOLICY_LRU);
+  print_stats(sumB(a, 4, 128));
+
+  cache = cache_new(CACHE_SIZE_IN_BLOCKS, block_size, 1, CACHE_REPLACEMENTPOLICY_LRU);
+  print_stats(sumB(a, 4, 120));
 }
